@@ -1,7 +1,9 @@
 import java.util.Scanner;
 
 public class Menu {
-    public static void useMenu() {
+    BudgetFunction budgetFunction = new BudgetFunction();
+
+    public  void useMenu() {
         Scanner scanner = new Scanner(System.in);
         String choice;
         do {
@@ -13,13 +15,13 @@ public class Menu {
             choice = scanner.nextLine();
             switch (choice) {
                 case "1":
-                    BudgetFunction.addProfit();
+                    budgetFunction.addProfit();
                     break;
                 case "2":
-                    BudgetFunction.addExpenses();
+                    budgetFunction.addExpenses();
                     break;
                 case "3":
-                    BudgetFunction.ProfExpenView();
+                    budgetFunction.ProfExpenView();
                     break;
                 case "0":
                     System.out.println("KONIEC");

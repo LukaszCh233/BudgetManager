@@ -1,12 +1,13 @@
 import java.util.Scanner;
 
 public class BudgetFunction {
+    ProfExpenList profExpenList = new ProfExpenList();
         // BudgetFunction is class where the functions for the Budget Manager project are performed.
 
     // addProfit is function which allows the user add Profit to Budget Manager.
-    public static void addProfit() {
+    public  void addProfit() {
         Scanner scanner = new Scanner(System.in);
-        String b;
+        String backMenu;
 
         do {
             System.out.println("PODAJ NAZWE I KWOTE PRZYCHODU: ");
@@ -18,19 +19,19 @@ public class BudgetFunction {
                 }
                 double amount = scanner.nextDouble();
                 scanner.nextLine();
-                ProfExpenList.list.add(new ProfExpens(name, amount, "Przychod"));
+              profExpenList.getList().add (new ProfExpens(name, amount, ProfitExpensType.PROFIT));
             } catch (Exception e) {
                 scanner.nextLine();
             }
             System.out.println("CZY CHCESZ KONTYNUOWAC? TAK/NIE");
-            b = scanner.nextLine();
-        } while (!b.equalsIgnoreCase("NIE"));
+            backMenu = scanner.nextLine();
+        } while (!backMenu.equalsIgnoreCase("NIE"));
     }
 
     // addExpenses is function which allows the user add Expenses to Budget Manager.
-    public static void addExpenses() {
+    public  void addExpenses() {
         Scanner scanner = new Scanner(System.in);
-        String b;
+        String backMenu;
 
         do {
             System.out.println("PODAJ NAZWE I KWOTE WYDATKU: ");
@@ -42,61 +43,64 @@ public class BudgetFunction {
                 }
                 double amount = scanner.nextDouble();
                 scanner.nextLine();
-                ProfExpenList.list.add(new ProfExpens(name, amount, "Wydatek"));
+                profExpenList.getList().add(new ProfExpens(name, amount, ProfitExpensType.EXPENS));
             } catch (Exception d) {
                 scanner.nextLine();
             }
             System.out.println("CZY CHCESZ KONTYNUOWAC? TAK/NIE");
-            b = scanner.nextLine();
-        } while (!b.equalsIgnoreCase("NIE"));
+            backMenu = scanner.nextLine();
+        } while (!backMenu.equalsIgnoreCase("NIE"));
     }
 
     // ProfExpenView is function which is to be displayed list of profit and expenses, sum of profit and expenses.
     // Check our budget balance also this function can can remove the selected index from the list.
-    public static void ProfExpenView() {
+    public  void ProfExpenView() {
         Scanner scanner = new Scanner(System.in);
-        String b;
-        double sumP;
-        double sumE;
+        String backMenu;
+        double sumProfit;
+        double sumExpens;
 
         do {
-            sumP = 0;
-            sumE = 0;
+            sumProfit = 0;
+            sumExpens = 0;
             System.out.println("LISTA PRZYCHODOW i WYDATKOW: ");
             System.out.println("PRZYCHODY:");
-            for (int i = 1; i <= ProfExpenList.list.size(); i++) {
-                ProfExpens profitExpens = ProfExpenList.list.get(i);
-                if (profitExpens.type.equals("Przychod")) {
+            for (int i = 0; i < profExpenList.list.size(); i++) {
+                ProfExpens profitExpens = profExpenList.list.get(i);
+                if (profitExpens.getType() == ProfitExpensType.PROFIT) {
                     System.out.println(i + ". " + profitExpens+" zl");
-                    sumP += profitExpens.amount;
+                    sumProfit += profitExpens.amount;
                 }
             }
-            System.out.println("SUMA PRZYCHODU - " + sumP + " zl");
+            System.out.println("SUMA PRZYCHODU - " + sumProfit + " zl");
 
             System.out.println("---------------------------");
             System.out.println("WYDATKI:");
-            for (int a = 1; a <= ProfExpenList.list.size(); a++) {
-                ProfExpens profitExpens1 = ProfExpenList.list.get(a);
-                if (profitExpens1.type.equals("Wydatek")) {
+            for (int a = 0; a < profExpenList.list.size(); a++) {
+                ProfExpens profitExpens1 = profExpenList.list.get(a);
+                if (profitExpens1.getType() == ProfitExpensType.EXPENS) {
                     System.out.println(a + ". " + profitExpens1+" zl");
-                    sumE += profitExpens1.amount;
+                    sumExpens += profitExpens1.amount;
                 }
             }
-            System.out.println("SUMA WYDATKOW - " + sumE + " zl");
+            System.out.println("SUMA WYDATKOW - " + sumExpens + " zl");
 
             System.out.println("\n##############################\n");
 
-            double balance = sumP - sumE;
-            System.out.println("AKTUALNE SALDO TO:" + balance + " zl");
+            double balance = sumProfit - sumExpens;
+            System.out.println("AKTUALNE SALDO TO:" + balance + " zl\n");
+            if (balance < 0){
+                System.out.println("WYDATKI PRZEKROCZYŁY TWÓJ BUDŻET!!!!");
+            }
 
             System.out.println("JESLI CHCESZ USNUNAC COS Z LISTY WYBIERZ /TAK/ JESLI CHCESZ WYJSC WYBIERZ /NIE/:");
-            b = scanner.nextLine();
-            if (b.equalsIgnoreCase("tak")) {
+            backMenu = scanner.nextLine();
+            if (backMenu.equalsIgnoreCase("tak")) {
                 System.out.println("WYBIERZ NUMER:");
                 int index = scanner.nextInt();
                 scanner.nextLine();
-                ProfExpenList.list.remove(index);
+                profExpenList.list.remove(index);
             }
-        } while (!b.equalsIgnoreCase("nie"));
+        } while (!backMenu.equalsIgnoreCase("nie"));
     }
 }

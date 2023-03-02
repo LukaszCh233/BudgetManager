@@ -1,45 +1,23 @@
 public class ProfExpens {
      String name;
      double amount;
-     String type;
+     ProfitExpensType type;
 
 
 
-    public ProfExpens(String name, double amount, String type) {
+    public ProfExpens(String name, double amount, ProfitExpensType type) {
         this.name = name;
         this.amount = amount;
         this.type = type;
 
+    }
+    public ProfitExpensType getType() {
+        return type;
     }
     @Override
     public String toString() {
-        return
-                name +" - "+
-                 amount
-                ;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public double getAmount() {
-        return amount;
-    }
-
-    public void setAmount(double amount) {
-        this.amount = amount;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
+        return name +" - "+ amount;
     }
 }
+
+

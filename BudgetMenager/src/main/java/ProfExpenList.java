@@ -2,6 +2,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class ProfExpenList {
-        static List<ProfExpens> list = new ArrayList<>();
-}
+ public class ProfExpenList {
+         List<ProfExpens> list = new ArrayList<>();
+
+         public List<ProfExpens> getList() {
+                 return list;
+         }
+ }
+
