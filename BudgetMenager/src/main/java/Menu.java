@@ -1,3 +1,5 @@
+
+
 import java.util.Scanner;
 
 public class Menu {
@@ -6,6 +8,7 @@ public class Menu {
     public  void useMenu() {
         Scanner scanner = new Scanner(System.in);
         String choice;
+
         do {
             System.out.println("WYBIERZ CO CHCESZ ZROBIC:");
             System.out.println("1 - DODAWANIE PRZYCHODU");
@@ -21,10 +24,12 @@ public class Menu {
                     budgetFunction.addExpenses();
                     break;
                 case "3":
+                    budgetFunction.loadProfExpenListFromFile();
                     budgetFunction.ProfExpenView();
                     break;
                 case "0":
                     System.out.println("KONIEC");
+                    budgetFunction.saveProfExpenListToFile();
                     break;
                 default:
                     System.out.println("NIEPOPRAWNA OPCJA, SPROBUJ JESZCZE RAZ");

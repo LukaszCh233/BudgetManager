@@ -11,6 +11,15 @@ public class ProfExpens {
         this.type = type;
 
     }
+
+    public String getName() {
+        return name;
+    }
+
+    public double getAmount() {
+        return amount;
+    }
+
     public ProfitExpensType getType() {
         return type;
     }
