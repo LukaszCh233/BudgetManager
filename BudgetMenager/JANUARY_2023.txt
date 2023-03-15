@@ -1,0 +1,3 @@
+dpd,2000.0,PROFIT
+pizza,50.0,EXPENS
+zakupy,120.0,EXPENS
