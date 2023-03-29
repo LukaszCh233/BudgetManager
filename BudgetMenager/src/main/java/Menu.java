@@ -1,9 +1,10 @@
 import java.util.Scanner;
+
 public class Menu {
     BudgetFunction budgetFunction = new BudgetFunction();
 
     //useMenu is function which control Budget Manager project.
-    public  void useMenu() {
+    public void useMenu() {
         Scanner scanner = new Scanner(System.in);
         String choice;
         budgetFunction.checkMonth();
@@ -20,9 +21,11 @@ public class Menu {
             switch (choice) {
                 case "1":
                     budgetFunction.addProfit();
+                    budgetFunction.fileWriter();
                     break;
                 case "2":
                     budgetFunction.addExpenses();
+                    budgetFunction.fileWriter();
                     break;
                 case "3":
                     budgetFunction.profitExpensesView();
@@ -39,5 +42,6 @@ public class Menu {
                     break;
             }
         } while (!choice.equalsIgnoreCase("0"));
+
     }
 }

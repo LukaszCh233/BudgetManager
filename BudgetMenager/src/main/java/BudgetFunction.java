@@ -3,21 +3,20 @@ import java.time.LocalDate;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-    // BudgetFunction is class where the functions for the Budget Manager project are performed.
+// BudgetFunction is class where the functions for the Budget Manager project are performed.
 public class BudgetFunction {
     LocalDate lastWriteDate = LocalDate.now().withDayOfMonth(1);
     LocalDate currentDate = LocalDate.now();
     String fileName = lastWriteDate.getMonth().toString() + "_" + lastWriteDate.getYear() + ".txt";
-
-    ProfitExpensesList profExpenList = new ProfitExpensesList();
+    String fileNameNow = currentDate.getMonth().toString() + "_" + currentDate.getYear() + ".txt";
+    ProfitExpensesList profitExpensesList = new ProfitExpensesList();
+    ProfitExpensesList choiceMonthList = new ProfitExpensesList();
 
     // addProfit is function which allows the user add Profit to Budget Manager.
     public void addProfit() {
         Scanner scanner = new Scanner(System.in);
         String backMenu;
-        if (profExpenList == null) {
-            profExpenList = new ProfitExpensesList();
-        }
+
         do {
             System.out.println("Podaj nazwę i kwotę przychodu: ");
             try {
@@ -28,7 +27,7 @@ public class BudgetFunction {
                 }
                 double amount = scanner.nextDouble();
                 scanner.nextLine();
-                profExpenList.getList().add(new ProfitExpenses(name, amount, ProfitExpensesType.PROFIT));
+                profitExpensesList.getList().add(new ProfitExpenses(name, amount, ProfitExpensesType.PROFIT));
             } catch (Exception e) {
                 scanner.nextLine();
             }
@@ -52,7 +51,7 @@ public class BudgetFunction {
                 }
                 double amount = scanner.nextDouble();
                 scanner.nextLine();
-                profExpenList.getList().add(new ProfitExpenses(name, amount, ProfitExpensesType.EXPENS));
+                profitExpensesList.getList().add(new ProfitExpenses(name, amount, ProfitExpensesType.EXPENS));
             } catch (Exception d) {
                 scanner.nextLine();
             }
@@ -73,11 +72,11 @@ public class BudgetFunction {
         do {
             sumProfit = 0;
             sumExpenses = 0;
-            System.out.println("Lista przychodów i wydatków: ");
+            System.out.println("Lista przychodów i wydatków:");
 
             System.out.println("Przychody:");
-            for (int i = 0; i < profExpenList.list.size(); i++) {
-                ProfitExpenses profitExpens = profExpenList.list.get(i);
+            for (int i = 0; i < profitExpensesList.list.size(); i++) {
+                ProfitExpenses profitExpens = profitExpensesList.list.get(i);
                 if (profitExpens.getType() == ProfitExpensesType.PROFIT) {
                     System.out.println(i + ". " + profitExpens + " zl");
                     sumProfit += profitExpens.amount;
@@ -86,8 +85,8 @@ public class BudgetFunction {
             System.out.println("Suma przychodów - " + sumProfit + " zl");
             System.out.println("---------------------------");
             System.out.println("Wydatki:");
-            for (int a = 0; a < profExpenList.list.size(); a++) {
-                ProfitExpenses profitExpens1 = profExpenList.list.get(a);
+            for (int a = 0; a < profitExpensesList.list.size(); a++) {
+                ProfitExpenses profitExpens1 = profitExpensesList.list.get(a);
                 if (profitExpens1.getType() == ProfitExpensesType.EXPENS) {
                     System.out.println(a + ". " + profitExpens1 + " zl");
                     sumExpenses += profitExpens1.amount;
@@ -110,7 +109,7 @@ public class BudgetFunction {
                     System.out.println("WYBIERZ NUMER:");
                     int index = scanner.nextInt();
                     scanner.nextLine();
-                    profExpenList.list.remove(index);
+                    profitExpensesList.list.remove(index);
                 } catch (InputMismatchException e) {
                     System.out.println("Niepoprawny format numeru, spróbuj ponownie.");
                     scanner.nextLine();
@@ -120,11 +119,12 @@ public class BudgetFunction {
             }
         } while (!backMenu.equalsIgnoreCase("nie"));
     }
+
     public void fileWriter() {
 
         try {
             FileWriter fileWriter = new FileWriter(fileName);
-            for (ProfitExpenses pe : profExpenList.list) {
+            for (ProfitExpenses pe : profitExpensesList.list) {
                 fileWriter.write(pe.getName() + "," + pe.getAmount() + "," + pe.getType() + "\n");
             }
             fileWriter.close();
@@ -139,23 +139,31 @@ public class BudgetFunction {
             e.printStackTrace();
         }
     }
-    public void loadFile() {
 
+    public void loadFile() {
+        System.out.println(fileNameNow);
+        System.out.println(fileName);
+        if (!fileName.equals(fileNameNow)) {
+            fileName = fileNameNow;
+        }
         try {
             FileReader reader = new FileReader(fileName);
             Scanner scanner = new Scanner(reader);
             while (scanner.hasNextLine()) {
                 String[] line = scanner.nextLine().split(",");
+
                 if (line.length == 3) {
                     ProfitExpensesType type = ProfitExpensesType.valueOf(line[2]);
                     String name = line[0];
                     double amount = Double.parseDouble(line[1]);
-                    profExpenList.list.add(new ProfitExpenses(name, amount, type));
+                    profitExpensesList.list.add(new ProfitExpenses(name, amount, type));
                 }
             }
             scanner.close();
             reader.close();
             System.out.println("Lista wczytana z pliku.");
+        } catch (FileNotFoundException e) {
+            System.out.println("Plik nie istnieje ");
         } catch (IOException e) {
             System.out.println("Błąd podczas odczytu z pliku.");
             e.printStackTrace();
@@ -192,39 +200,74 @@ public class BudgetFunction {
                 case "1":
                     numberMonth = "JANUARY" + "_" + lastWriteDate.getYear() + ".txt";
                     loadSelectedMonth(numberMonth);
-                    System.out.println("Budżet na: "+ numberMonth);
+                    System.out.println("Budżet na: " + numberMonth);
                     break;
                 case "2":
                     numberMonth = "FEBRUARY" + "_" + lastWriteDate.getYear() + ".txt";
                     loadSelectedMonth(numberMonth);
+                    System.out.println("Budżet na: " + numberMonth);
                     break;
                 case "3":
                     numberMonth = "MARCH" + "_" + lastWriteDate.getYear() + ".txt";
                     loadSelectedMonth(numberMonth);
+                    System.out.println("Budżet na: " + numberMonth);
                     break;
                 case "4":
                     numberMonth = "APRIL" + "_" + lastWriteDate.getYear() + ".txt";
+                    System.out.println("Budżet na: " + numberMonth);
                     break;
                 case "5":
                     numberMonth = "MAY" + "_" + lastWriteDate.getYear() + ".txt";
+                    System.out.println("Budżet na: " + numberMonth);
+                    break;
+                case "6":
+                    numberMonth = "JUNE" + "_" + lastWriteDate.getYear() + ".txt";
+                    System.out.println("Budżet na: " + numberMonth);
+                    break;
+                case "7":
+                    numberMonth = "JULY" + "_" + lastWriteDate.getYear() + ".txt";
+                    System.out.println("Budżet na: " + numberMonth);
+                    break;
+                case "8":
+                    numberMonth = "AUGUST" + "_" + lastWriteDate.getYear() + ".txt";
+                    System.out.println("Budżet na: " + numberMonth);
+                    break;
+                case "9":
+                    numberMonth = "SEPTEMBER" + "_" + lastWriteDate.getYear() + ".txt";
+                    System.out.println("Budżet na: " + numberMonth);
+                    break;
+                case "10":
+                    numberMonth = "OCTOBER" + "_" + lastWriteDate.getYear() + ".txt";
+                    System.out.println("Budżet na: " + numberMonth);
+                    break;
+                case "11":
+                    numberMonth = "NOVEMBER" + "_" + lastWriteDate.getYear() + ".txt";
+                    System.out.println("Budżet na: " + numberMonth);
+                    break;
+                case "12":
+                    numberMonth = "DECEMBER" + "_" + lastWriteDate.getYear() + ".txt";
+                    System.out.println("Budżet na: " + numberMonth);
                     break;
                 case "0":
                     System.out.println("Koniec");
+
                 default:
                     System.out.println("Nieporawna opcja, spróbuj jeszcze raz:");
             }
             File file = new File(numberMonth);
             if (!file.exists()) {
                 System.out.println("Plik " + numberMonth + " nie istnieje.");
-            } else profitExpensesView();
+            } else choiceMonthBudget();
 
         } while (!numberMonth.equals("0"));
+
+        System.out.println();
     }
 
     //LoadSelectedMonth is function which read selected file if existed.
     public void loadSelectedMonth(String numberMonth) {
 
-        profExpenList.list.clear();
+        choiceMonthList.choiceMonthList.clear();
         try {
             FileReader reader = new FileReader(numberMonth);
             Scanner scanner = new Scanner(reader);
@@ -234,7 +277,7 @@ public class BudgetFunction {
                     ProfitExpensesType type = ProfitExpensesType.valueOf(line[2]);
                     String name = line[0];
                     double amount = Double.parseDouble(line[1]);
-                    profExpenList.list.add(new ProfitExpenses(name, amount, type));
+                    choiceMonthList.choiceMonthList.add(new ProfitExpenses(name, amount, type));
                 }
             }
             scanner.close();
@@ -247,5 +290,48 @@ public class BudgetFunction {
             System.out.println("Błąd podczas odczytu z pliku.");
             e.printStackTrace();
         }
+    }
+
+    public void choiceMonthBudget() {
+        Scanner scanner = new Scanner(System.in);
+        String backMenu;
+        double sumProfit;
+        double sumExpenses;
+
+        do {
+            sumProfit = 0;
+            sumExpenses = 0;
+            System.out.println("Lista przychodów i wydatków:");
+
+            System.out.println("Przychody:");
+            for (int i = 0; i < choiceMonthList.choiceMonthList.size(); i++) {
+                ProfitExpenses profitExpens = choiceMonthList.choiceMonthList.get(i);
+                if (profitExpens.getType() == ProfitExpensesType.PROFIT) {
+                    System.out.println(i + ". " + profitExpens + " zl");
+                    sumProfit += profitExpens.amount;
+                }
+            }
+            System.out.println("Suma przychodów - " + sumProfit + " zl");
+            System.out.println("---------------------------");
+            System.out.println("Wydatki:");
+            for (int a = 0; a < choiceMonthList.choiceMonthList.size(); a++) {
+                ProfitExpenses profitExpens1 = choiceMonthList.choiceMonthList.get(a);
+                if (profitExpens1.getType() == ProfitExpensesType.EXPENS) {
+                    System.out.println(a + ". " + profitExpens1 + " zl");
+                    sumExpenses += profitExpens1.amount;
+                }
+            }
+            System.out.println("Suma wydatków - " + sumExpenses + " zl");
+
+            System.out.println("\n##############################\n");
+
+            double balance = sumProfit - sumExpenses;
+            System.out.println("Aktualne saldo to:" + balance + " zl\n");
+            if (balance < 0) {
+                System.out.println("Wydatki przekoroczyły twój budżet!!!!");
+            }
+            System.out.println("other month -> 0 ");
+            backMenu = scanner.nextLine();
+        } while (!backMenu.equalsIgnoreCase("0"));
     }
 }
